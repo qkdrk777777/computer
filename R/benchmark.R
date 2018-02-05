@@ -9,7 +9,7 @@
 #' @param up is 'up' grater than banchmark score output.
 #' @return
 #' @examples
-benchmark(cpu=T,amd=T,intel=T,header=0,na_rm=T,money_keep = T,order=3,up=500)
+#' benchmark(cpu=T,amd=T,intel=T,header=0,na_rm=T,money_keep = T,order=3,up=500)
 #' @export
 benchmark<-function(cpu=T,cal=F,na_rm=F,amd=F,intel=F,money_keep=F,order,header=0,up=0){
 if(!require(devtools))install.packages('devtools') else library(devtools)
