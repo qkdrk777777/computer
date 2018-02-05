@@ -29,7 +29,7 @@ tempurl<-'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&
 line<-read_html(tempurl,encoding='UTF-8')
 per<-html_nodes(line,css='.input_box')[4]%>%html_nodes(css='.recite')%>%html_text()
 per<-str_replace(per,'\\p{Hangul}','')
-per<-as.numeric(gsub('[, ??]',"",per))
+per<-as.numeric(gsub('[,]',"",per))
 
 for(i in 1:2)tables[[4]][,i]<-unfactor(tables[[4]][,i])
 tables[[4]][,2]<-gsub('[,]','',tables[[4]][,2])
