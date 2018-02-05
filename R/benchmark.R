@@ -1,3 +1,16 @@
+#' arrows is overlay in plot
+#'
+#' @param cpu= T or F. T is output of cpu , F is output of gpu
+#' @param cal= delete of comma
+#' @param amd= if amd=T only output of AMD cpu.
+#' @param intal= if intel=T only output of intel cpu.
+#' @param money_keep if 'money_keep =T' then '1 banchmark point of price' is cbind
+#' @param order sort number if money_keep=T then order=1~4 is range. else if money_keep=F then order=1~3.
+#' @param up is 'up' grater than banchmark score output.
+#' @return
+#' @examples
+#' benchmark(cpu=F,amd=T,header=0,na_rm=F,money_keep = T,order=4,up=500)
+#' @export
 benchmark<-function(cpu=T,cal=F,na_rm=F,amd=F,intel=F,money_keep=F,order,header=0,up=0){
 if(!require(devtools))install.packages('devtools') else library(devtools)
 if(!require('DUcj'))devtools::install_github('qkdrk777777/DUcj',force=T)
@@ -15,7 +28,7 @@ tables<-readHTMLTable(url1)
 tempurl<-'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%ED%99%98%EC%9C%A8'
 line<-read_html(tempurl,encoding='UTF-8')
 per<-html_nodes(line,css='.input_box')[4]%>%html_nodes(css='.recite')%>%html_text()
-per<-as.numeric(gsub('[, ¿ø]',"",per))
+per<-as.numeric(gsub('[, ??]',"",per))
 
 
 for(i in 1:2)tables[[4]][,i]<-unfactor(tables[[4]][,i])
@@ -33,8 +46,7 @@ if(intel==T&amd==T) output=output else if(amd){output<-output[regexpr("^AMD",out
 } else if(intel){output<-output[regexpr("^Intel",output[,1])!=-1,]}
 }
 if(money_keep){
-  
-if(order==1) t=4:1 else if(order==2)t=c(1,4:2) else if(order==3)t=c(1,4,2,3) else if(order==4)t=c(1,3,2,4) else stop('order is out of range 1~4')
+  if(order==1) t=4:1 else if(order==2)t=c(1,4:2) else if(order==3)t=c(1,4,2,3) else if(order==4)t=c(1,3,2,4) else stop('order is out of range 1~4')
   }else{if(order==1)t=3:1 else if(order==2) t=c(1,3,2) else if(order==3)t=1:3 else stop('order is out of range 1~3')}
 if(cal) {for(i in t)
 {  if(i!=4)tt=T else tt=F
@@ -51,4 +63,4 @@ if(header!=0)
 return(output)}
 
 
-benchmark(cpu=F,amd=T,header=0,na_rm=F,money_keep = T,order=4,up=500)
+
