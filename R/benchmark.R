@@ -9,7 +9,7 @@
 #' @param up is 'up' grater than banchmark score output.
 #' @return
 #' @examples
-#' benchmark(cpu=F,amd=T,header=0,na_rm=F,money_keep = T,order=4,up=500)
+benchmark(cpu=T,amd=T,intel=T,header=0,na_rm=T,money_keep = T,order=3,up=500)
 #' @export
 benchmark<-function(cpu=T,cal=F,na_rm=F,amd=F,intel=F,money_keep=F,order,header=0,up=0){
 if(!require(devtools))install.packages('devtools') else library(devtools)
@@ -28,8 +28,8 @@ tables<-readHTMLTable(url1)
 tempurl<-'https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=%ED%99%98%EC%9C%A8'
 line<-read_html(tempurl,encoding='UTF-8')
 per<-html_nodes(line,css='.input_box')[4]%>%html_nodes(css='.recite')%>%html_text()
+per<-str_replace(per,'\\p{Hangul}','')
 per<-as.numeric(gsub('[, ??]',"",per))
-
 
 for(i in 1:2)tables[[4]][,i]<-unfactor(tables[[4]][,i])
 tables[[4]][,2]<-gsub('[,]','',tables[[4]][,2])
@@ -49,12 +49,12 @@ if(money_keep){
   if(order==1) t=4:1 else if(order==2)t=c(1,4:2) else if(order==3)t=c(1,4,2,3) else if(order==4)t=c(1,3,2,4) else stop('order is out of range 1~4')
   }else{if(order==1)t=3:1 else if(order==2) t=c(1,3,2) else if(order==3)t=1:3 else stop('order is out of range 1~3')}
 if(cal) {for(i in t)
-{  if(i!=4)tt=T else tt=F
+{if(i%in%c(1,2))tt=T else if(i%in%c(3,4)) tt=F
     output<-output[order(output[,i],decreasing=tt),]}
 
   } else{
   for(i in t){
-    if(i!=4)tt=T else tt=F
+    if(i%in%c(1,2))tt=T else if(i%in%c(3,4)) tt=F
     output<-output[order(output[,i],decreasing=tt),]
     output[,i]<-formatC(output[,i],format='d',big.mark = ',')}}
 
