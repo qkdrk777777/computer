@@ -19,7 +19,6 @@ package(XML)
 package(stringr)
 package(RCurl)
 package(rvest)
-
 if(cpu)url<-'https://www.cpubenchmark.net/high_end_cpus.html' else url<-"https://www.videocardbenchmark.net/high_end_gpus.html"
 url1<-getURL(url)
 tables<-readHTMLTable(url1)
@@ -61,6 +60,3 @@ if(cal) {for(i in t)
 if(header!=0)
   output<-head(output,header)
 return(output)}
-
-
-
