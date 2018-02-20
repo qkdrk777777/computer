@@ -1,0 +1,12 @@
+name: gpu_score
+title: gpu_score
+username:
+account: qkdrk777777
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 285574
+bundleId: 1231574
+url: https://qkdrk777777.shinyapps.io/gpu_score/
+when: 1519135337.56388
+asMultiple: FALSE
+asStatic: FALSE
