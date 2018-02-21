@@ -97,18 +97,19 @@ for(i in 1:7)
   d<-d[order(d[,i]),]
 library(shiny)
 
+
 ui<-fluidPage(
-  sliderInput('total','Total',min=0,max=15000000,value=c(10000,50000),step=10000,sep=',',pre='&#8361;'),
-  dataTableOutput('out1'),
-  tableOutput('txt')
-)
+  sliderInput('total','Total',min=0,max=round(max(d[,6],na.rm=T),-4),value=c(10000,50000),step=10000,sep=',',pre='&#8361;'),
+  sliderInput('rank','Rank',min=0,max=round(max(d[,7],na.rm=T),-3),value=c(20,100)),
+  dataTableOutput('out1')
+    )
 server<-function(input, output,session){
-  output$txt<-renderText({paste(input$total)
-  })
-  output$out1<-renderDataTable({d[input$total[1]<d$total&d$total<input$total[2],]
-  })
+  output$out<-renderText({paste(input$rank)})
+  output$out1<-renderDataTable({d[input$total[1]<d$total&d$total<input$total[2]&input$rank[1]<d$rank&d$rank<input$rank[2],]
+      })
 }
 
 
 shinyApp(ui,server)
+
 
