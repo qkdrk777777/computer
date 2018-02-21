@@ -87,12 +87,14 @@ c2<-rbind(b1,b2,b3)
 c2<-c2[order(c2[,1]),]
 
 c<-merge(c1,c2,by='benchmark')
-c[c[,3]==0,3]<-NA
-c[c[,5]==0,5]<-NA
+c[c[,3]==0,3]<-0
+c[c[,5]==0,5]<-0
 d<-cbind(c,c[,3]+c[,5])
 
 colnames(d)<-c('benchmark','cpu_name','cpu_won','gpu_name','gpu_won','total')
 d$rank<-d$total/d$benchmark
+d[d$rank=='NaN','rank']<-0
+d[d$rank=="Inf",'rank']<-0
 for(i in 1:7)
   d<-d[order(d[,i]),]
 library(shiny)
@@ -100,12 +102,14 @@ library(shiny)
 
 ui<-fluidPage(
   sliderInput('total','Total',min=0,max=round(max(d[,6],na.rm=T),-4),value=c(10000,50000),step=10000,sep=',',pre='&#8361;'),
-  sliderInput('rank','Rank',min=0,max=round(max(d[,7],na.rm=T),-3),value=c(20,100)),
+  sliderInput('rank','Rank',min=0,max=round(max(d[,7],na.rm=T),-3),value=c(1,100)),
+  sliderInput('cpu','CPU Price',min=0,max=round(max(d[,3],na.rm=T),-3),value=c(1,100000),step=10000,sep=',',pre='&#8361;'),
+  sliderInput('gpu','GPU Price',min=0,max=round(max(d[,5],na.rm=T),-3),value=c(1,100000),step=10000,sep=',',pre='&#8361;'),
   dataTableOutput('out1')
     )
 server<-function(input, output,session){
   output$out<-renderText({paste(input$rank)})
-  output$out1<-renderDataTable({d[input$total[1]<d$total&d$total<input$total[2]&input$rank[1]<d$rank&d$rank<input$rank[2],]
+  output$out1<-renderDataTable({d[input$total[1]<=d$total&d$total<=input$total[2]&input$rank[1]<=d$rank&d$rank<=input$rank[2]&input$cpu[1]<=d$cpu_won&d$cpu_won<=input$cpu[2]&input$gpu[1]<=d$gpu_won&d$gpu_won<=input$gpu[2],]
       })
 }
 
