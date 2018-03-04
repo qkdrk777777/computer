@@ -26,14 +26,14 @@ for(j in 1:12){
   data<-data.frame(name,id,new_old,direct,date,price,stringsAsFactors = F)
   rownames(data)<-NULL
 
-  for( i in 2:23 ){Sys.sleep(2)
+  for( i in 2:23 ){
     script<-paste0('javascript:movePage(',i,');return false;')
     remDr$executeScript(script,arg=1:2)
     source<-remDr$getPageSource()[[1]]
     a<-read_html(source)%>%html_nodes(css='.normal_group')%>%html_text()
     a<-strsplit(gsub('\\t','',a),'\\n')
     a<-a[[1]][a[[1]]!='']
-    if(length(a)>8){
+    if(length(a)>8){Sys.sleep(2)
       name<-a[seq(1,length(a),8)]
       id<-a[seq(3,length(a),8)]
       new_old<-a[seq(4,length(a),8)]
@@ -48,9 +48,13 @@ for(j in 1:12){
       table<-table[table$direct!='판매완료',]
       rownames(table)<-NULL
       data<-rbind(data,table)}
+
   }
   list[[j]]<-data
 }
+remDr$close()
+pJS$stop()
+
 name<-c('cpu','ram','m/b','vga','hdd','ssd','odd','case','power','keyboard','mouse','soft')
 data<-NULL
 for(i in 1:length(name)){
